@@ -566,8 +566,16 @@ where
 }
 
 pub fn full_deploy_and_wait() -> DeployResult {
+    deploy_and_wait(true)
+}
+
+pub fn deploy_on_changed() -> DeployResult {
+    deploy_and_wait(false)
+}
+
+fn deploy_and_wait(full_check: bool) -> DeployResult {
     *mutex_lock!(DEPLOY_RESULT) = None;
-    if start_maintenance(true).is_err() {
+    if start_maintenance(full_check).is_err() {
         return DeployResult::Failure;
     }
 
