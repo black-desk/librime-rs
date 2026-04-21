@@ -8,7 +8,7 @@ use std::sync::Mutex;
 
 use librime_sys::{
     rime_get_api, rime_struct, RimeApi, RimeCommit, RimeContext, RimeKeyCode, RimeModifier,
-    RimeSessionId, RimeStatus,
+    RimeSchemaList, RimeSessionId, RimeStatus,
 };
 use once_cell::sync::Lazy;
 #[cfg(feature = "serde")]
@@ -172,6 +172,33 @@ pub fn start_maintenance(full_check: bool) -> Result<()> {
         return Err(Error::StartMaintenance);
     }
     Ok(())
+}
+
+#[derive(Debug)]
+pub struct SchemaInfo {
+    pub schema_id: String,
+    pub name: String,
+}
+
+pub fn get_schema_list() -> Vec<SchemaInfo> {
+    let mut list: RimeSchemaList = unsafe { std::mem::zeroed() };
+    let ok = unsafe { rime_api_call!(get_schema_list, &mut list) != 0 };
+    if !ok || list.size == 0 {
+        return Vec::new();
+    }
+    let schemas = unsafe {
+        std::slice::from_raw_parts(list.list, list.size)
+            .iter()
+            .map(|item| SchemaInfo {
+                schema_id: CStr::from_ptr(item.schema_id).to_string_lossy().to_string(),
+                name: CStr::from_ptr(item.name).to_string_lossy().to_string(),
+            })
+            .collect()
+    };
+    unsafe {
+        rime_api_call!(free_schema_list, &mut list);
+    }
+    schemas
 }
 
 pub fn create_session() -> Result<Session> {
