@@ -17,7 +17,17 @@ fn main() {
 
     println!("cargo:rustc-link-search={}", lib_dir);
 
-    println!("cargo:rustc-link-lib=rime");
+    println!("cargo:rustc-link-lib=static:+whole-archive=rime");
+    println!("cargo:rustc-link-lib=darts");
+    println!("cargo:rustc-link-lib=darts");
+    println!("cargo:rustc-link-lib=glog");
+    println!("cargo:rustc-link-lib=lua");
+    println!("cargo:rustc-link-lib=opencc");
+    println!("cargo:rustc-link-lib=gflags");
+    println!("cargo:rustc-link-lib=leveldb");
+    println!("cargo:rustc-link-lib=marisa");
+    println!("cargo:rustc-link-lib=yaml-cpp");
+    println!("cargo:rustc-link-lib=stdc++");
 
     let bindings = bindgen::Builder::default()
         .header(
