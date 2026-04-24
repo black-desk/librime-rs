@@ -18,6 +18,17 @@ use crate::errors::{Error, Result};
 
 pub mod errors;
 
+// Re-export commonly used keycodes from librime-sys
+pub use librime_sys::{
+    RimeKeyCode_XK_BackSpace as KEY_BACKSPACE, RimeKeyCode_XK_Delete as KEY_DELETE,
+    RimeKeyCode_XK_Down as KEY_DOWN, RimeKeyCode_XK_End as KEY_END,
+    RimeKeyCode_XK_Escape as KEY_ESCAPE, RimeKeyCode_XK_Home as KEY_HOME,
+    RimeKeyCode_XK_Left as KEY_LEFT, RimeKeyCode_XK_Page_Down as KEY_PAGEDOWN,
+    RimeKeyCode_XK_Page_Up as KEY_PAGEUP, RimeKeyCode_XK_Return as KEY_RETURN,
+    RimeKeyCode_XK_Right as KEY_RIGHT, RimeKeyCode_XK_Tab as KEY_TAB,
+    RimeKeyCode_XK_Up as KEY_UP, RimeKeyCode_XK_space as KEY_SPACE,
+};
+
 struct RimeApiWrapper(*mut RimeApi);
 
 impl Deref for RimeApiWrapper {
